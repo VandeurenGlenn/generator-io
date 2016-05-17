@@ -1,0 +1,9 @@
+{
+    "extends": "google",
+    "globals": {
+      "window": true,
+      "document": true,
+      "HTMLElement": true,
+      "localStorage": true
+    }
+}

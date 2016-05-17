@@ -1,0 +1,29 @@
+{
+  "include": [{
+    "name": "eslint",
+    "npm": [
+      "eslint",
+      "eslint-config-google",
+    ]
+    }, {
+    "name":"es6",
+    "npm": [
+      "gulp-babel",
+      "babel-preset-es2015",
+      "gulp-sourcemaps"
+    ]
+  }, {
+    "name": "includeRagin",
+    "npm": [
+      "ragin"
+    ],
+    "bower": [
+      "ragin-app",
+      "ragin-ui-drawer",
+      "paper-icon-button",
+      "iron-media-query",
+      "ragin-ui-content",
+      "ragin-todo"
+    ]
+  }]
+}
