@@ -1,19 +1,18 @@
 {
-  "include": [{
-    "name": "eslint",
+  "eslint": {
     "npm": [
       "eslint",
-      "eslint-config-google",
+      "eslint-config-google"
     ]
-    }, {
-    "name":"es6",
+  },
+  "es6": {
     "npm": [
       "gulp-babel",
       "babel-preset-es2015",
       "gulp-sourcemaps"
     ]
-  }, {
-    "name": "includeRagin",
+  },
+  "includeRagin": {
     "npm": [
       "ragin"
     ],
@@ -25,5 +24,5 @@
       "ragin-ui-content",
       "ragin-todo"
     ]
-  }]
+  }
 }
