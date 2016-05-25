@@ -1,10 +1,10 @@
 {
   "name": "generator-io",
-  "version": "0.1.0",
-  "description": "Scaffold out a new io project",
+  "version": "0.1.1",
+  "description": "Scaffold out a new io project.",
   "repository": "VandeurenGlenn/generator-io",
   "license": "Apache-2.0",
-  "private": true,
+  "readme": "README.md",
   "author": {
     "name": "Glenn Vandeuren",
     "email": "vandeurenglenn@gmail.com",
