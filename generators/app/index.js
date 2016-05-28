@@ -3,6 +3,8 @@ var yeoman = require('yeoman-generator');
 var path = require('path');
 var chalk = require('chalk');
 var yosay = require('yosay');
+var ghUsername = require('github-username');
+
 /**
  * @module app
  */
@@ -61,12 +63,15 @@ var io = yeoman.Base.extend({
       message: 'How would you like to call your io-app?',
       default() {
         return _this.appname;
-      }
+      },
+      store: true,
+      required: false
     }, {
       type: 'confirm',
       name: 'boilerplate',
       message: 'Would you like to have the full app?',
-      default: true
+      default: true,
+      required: false
     }, {
       when(answers) {
         return answers.boilerplate === false;
@@ -74,7 +79,8 @@ var io = yeoman.Base.extend({
       type: 'confirm',
       name: 'ioElements',
       message: 'Install io-elements?',
-      default: true
+      default: true,
+      required: false
     }, {
       when(answers) {
         return answers.boilerplate === false;
@@ -82,7 +88,8 @@ var io = yeoman.Base.extend({
       type: 'confirm',
       name: 'includeRagin',
       message: 'Install [Ragin](https://github.com/DeveloperRagin/ragin)?',
-      default: true
+      default: true,
+      required: false
     }, {
       when(answers) {
         return answers.boilerplate === false;
@@ -90,7 +97,8 @@ var io = yeoman.Base.extend({
       type: 'confirm',
       name: 'es6',
       message: 'Include ES6',
-      default: true
+      default: true,
+      required: false
     }, {
       when(answers) {
         return answers.boilerplate === false;
@@ -98,20 +106,48 @@ var io = yeoman.Base.extend({
       type: 'confirm',
       name: 'eslint',
       message: 'Include eslint',
-      default: true
+      default: true,
+      required: false
     }, {
       type: 'input',
-      name: 'devName',
-      message: 'Whats your name?'
+      name: 'authorEmail',
+      message: 'What\'s your email?',
+      default: 'your@email.com',
+      store: true,
+      required: false
+    }, {
+      type: 'confirm',
+      name: 'skipInstall',
+      message: 'Skip install ?',
+      default: false,
+      required: false
     }];
 
     this.prompt(prompts, function(props) {
       if (props.boilerplate) {
         props.includeRagin = true;
         props.es6 = true;
+        props.eslint = true;
       }
       this.props = props;
-      done();
+
+      if (props.authorEmail === 'your@email.com') {
+        done();
+      } else {
+        ghUsername(props.authorEmail, function(err, username) {
+          if (err) {
+            username = username || '';
+          }
+          this.prompt({
+            name: 'githubAccount',
+            message: 'GitHub username or organization',
+            default: username
+          }, function(prompt) {
+            this.props.githubAccount = prompt.githubAccount;
+            done();
+          }.bind(this));
+        }.bind(this));
+      }
     }.bind(this));
   },
 
@@ -150,6 +186,13 @@ var io = yeoman.Base.extend({
         );
       }
 
+      if (this.props.eslint) {
+        this.fs.copy(
+          this.templatePath('.eslintrc'),
+          this.destinationPath('.eslintrc')
+        );
+      }
+
       this.fs.copy(
         this.templatePath('src/scripts/app.js'),
         this.destinationPath('src/scripts/app.js')
@@ -174,11 +217,6 @@ var io = yeoman.Base.extend({
     this.fs.copy(
       this.templatePath('tasks'),
       this.destinationPath('tasks')
-    );
-
-    this.fs.copy(
-      this.templatePath('.eslintrc'),
-      this.destinationPath('.eslintrc')
     );
 
     this.fs.copy(
@@ -271,7 +309,9 @@ var io = yeoman.Base.extend({
   },
 
   install: function() {
-    this.installDependencies();
+    if (!this.props.skipInstall) {
+      this.installDependencies();
+    }
   }
 });
 

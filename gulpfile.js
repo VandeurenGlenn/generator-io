@@ -1,4 +1,5 @@
 'use strict';
+require('es6-promise-polyfill');
 var path = require('path');
 var gulp = require('gulp');
 var nsp = require('gulp-nsp');
@@ -18,17 +19,17 @@ gulp.task('pre-test', function() {
   return tasks.preTest();
 });
 
-gulp.task('test', ['pre-test'], function(cb) {
+gulp.task('test', gulp.series('pre-test', function(cb) {
   tasks.test(() => {
     cb();
   });
-});
+}));
 
 gulp.task('watch', function() {
   gulp.watch(['generators/**/*.js', 'test/**'], ['test']);
 });
 
-gulp.task('coveralls', ['test'], function() {
+gulp.task('coveralls', gulp.series('test'), function() {
   if (!process.env.CI) {
     return;
   }
@@ -37,11 +38,21 @@ gulp.task('coveralls', ['test'], function() {
     .pipe(coveralls());
 });
 
-gulp.task('prepublish', ['nsp']);
-gulp.task('default', ['eslint:io-app', 'static', 'test', 'coveralls']);
-
 gulp.task('eslint:io-app', cb => {
-  tasks.eslint('generators/app/templates/io-app', () => {
+  return tasks.eslint('generators/app/templates/io-app', () => {
     cb();
   });
 });
+
+gulp.task('sync', () => {
+  return tasks.ghPush({version: true});
+});
+
+gulp.task('prepublish', gulp.series('nsp'));
+gulp.task('default',
+  gulp.series(
+    'eslint:io-app',
+    'static',
+    // 'test',
+    'coveralls'
+  ));
