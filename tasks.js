@@ -30,8 +30,7 @@ class Tasks {
   }
 
   preTest() {
-    return gulp.src(['generators/app/index.js'])
-      .pipe($.excludeGitignore())
+    return gulp.src(['generators/**/index.js'])
       .pipe($.istanbul({
         includeUntested: true
       }))
@@ -41,7 +40,7 @@ class Tasks {
   test(cb) {
     var mochaErr;
 
-    gulp.src(['test/app.js'])
+    gulp.src(['test/*.js'])
       .pipe($.plumber())
       .pipe($.mocha({
         reporter: 'spec',

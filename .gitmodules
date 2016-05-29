@@ -1,3 +1,6 @@
-[submodule "app/templates/io-app"]
-	path = app/templates/io-app
-	url = https://github.com/VandeurenGlenn/io-app.git
+[submodule "io-app"]
+	path = io-app
+	url = https://github.com/vandeurenglenn/io-app
+[submodule "generators/app/templates/io-app"]
+	path = generators/app/templates/io-app
+	url = https://github.com/vandeurenglenn/io-app

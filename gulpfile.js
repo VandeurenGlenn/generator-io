@@ -19,11 +19,11 @@ gulp.task('pre-test', function() {
   return tasks.preTest();
 });
 
-gulp.task('test', gulp.series('pre-test', function(cb) {
-  tasks.test(() => {
-    cb();
-  });
-}));
+gulp.task('run-test', function(cb) {
+  tasks.test(cb);
+});
+
+gulp.task('test', gulp.series('pre-test', 'run-test'));
 
 gulp.task('watch', function() {
   gulp.watch(['generators/**/*.js', 'test/**'], ['test']);
@@ -38,12 +38,6 @@ gulp.task('coveralls', gulp.series('test'), function() {
     .pipe(coveralls());
 });
 
-gulp.task('eslint:io-app', cb => {
-  return tasks.eslint('generators/app/templates/io-app', () => {
-    cb();
-  });
-});
-
 gulp.task('sync', () => {
   return tasks.ghPush({version: true});
 });
@@ -51,8 +45,6 @@ gulp.task('sync', () => {
 gulp.task('prepublish', gulp.series('nsp'));
 gulp.task('default',
   gulp.series(
-    'eslint:io-app',
     'static',
-    // 'test',
     'coveralls'
   ));

@@ -8,7 +8,7 @@ then
 
   run_build() {
     echo Building...
-    gulp
+    git submodule update --init --recursive && gulp
   }
 
   run_build
