@@ -21,7 +21,7 @@
     "chalk": "^1.0.0",
     "path": "^0.12.7",
     "yeoman-generator": "^0.22.0",
-    "yosay": "^1.0.2"
+    "yosay": "^2.0.0"
   },
   "devDependencies": {
     "es6-promise-polyfill": "^1.2.0",
